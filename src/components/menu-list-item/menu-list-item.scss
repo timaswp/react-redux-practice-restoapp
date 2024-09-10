@@ -8,6 +8,10 @@
         padding: 20px;
         margin-right: 40px;
         margin-bottom: 40px;
+        a {
+            text-decoration: none;
+            color: black;
+        }
     }
     &__title {
         font-size: 22px;
@@ -22,11 +26,19 @@
         margin-bottom: 20px;
     }
     &__category, &__price {
+        display: flex;
+        align-items: center;
         font-size: 18px;
         font-weight: 300;
         margin-bottom: 10px;
         span {
             font-weight: 700;
+            margin-left: 5px;
+            img {
+                width: 40px;
+                height: auto;
+                margin-left: 10px;
+            }
         }
     }
     &__btn {

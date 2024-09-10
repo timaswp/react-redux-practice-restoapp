@@ -1,0 +1,36 @@
+.item {
+    &_page{
+        display: flex;
+        width: 100%;
+        height: calc(100vh - 60px);
+    }
+    &_block{
+        margin: auto;
+        width: 700px;
+        height: 470px;
+        background-color: rgba(182, 182, 182, 0.8);
+    }
+    &_error {
+        &_text {
+            font-size: 32px;
+            font-weight: 700;
+            color: red;
+        }
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+}
+
+.menu {
+    &__btns {
+        display: flex;
+        justify-content: space-between;
+    }
+    &__btn {
+        &_back {
+            background-color: rgb(163, 31, 31);
+        }
+    }
+}

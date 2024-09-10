@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainPage, CartPage } from '../pages';
+import { MainPage, CartPage, ItemPage } from '../pages';
 import AppHeader from '../app-header';
 import { Routes, Route } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const App = () => {
             <Routes>
                 <Route path='/' Component={MainPage}/>
                 <Route path='/cart' Component={CartPage}/>
+                <Route path='/:id' Component={ItemPage}/>
             </Routes>
         </div>
     )

@@ -2,50 +2,64 @@ import React, { Component } from 'react';
 import MenuListItem from '../menu-list-item';
 import { connect } from 'react-redux';
 import WithRestoService from '../hoc';
-import { menuLoaded, menuRequested } from '../../actions';
+import { menuLoaded, menuRequested, menuError } from '../../actions';
 import Spinner from '../spinner';
+import Error from '../error';
 
 import './menu-list.scss';
 
 class MenuList extends Component {
     componentDidMount() {
-        const {RestoService, menuRequested} = this.props;
+        const {RestoService, menuRequested, menuLoaded, menuError} = this.props;
 
         menuRequested();
 
         RestoService.getMenuItems()
-            .then(res => this.props.menuLoaded(res));
+            .then(res => menuLoaded(res))
+            .catch(() => menuError());
     }
 
     render() {
-        const {menuItems, loading} = this.props;
+        const {menuItems, loading, error} = this.props;
 
         if (loading) {
-            return <Spinner/>;
+            return <Spinner/>
         }
 
+        if (error) {
+            return <Error/>
+        }
+
+        const items = menuItems.map(menuItem => {
+            return <MenuListItem key = {menuItem.id} menuItem = {menuItem}/>
+        });
+
         return (
-            <ul className="menu__list">
-                {
-                    menuItems.map(menuItem => {
-                        return <MenuListItem key={menuItem.id} menuItem={menuItem}/>
-                    })
-                }
-            </ul>
+            <View items = {items}/>
         )
     }
+};
+
+const View = ({items}) => {
+    return (
+        <ul className="menu__list">
+            {items}
+        </ul>
+    )
 };
 
 const mapStateToProps = (state) => {
     return {
         menuItems: state.menu,
-        loading: state.loading
+        loading: state.loading,
+        error: state.error
     }
 };
 
 const mapDispatchToProps = {
     menuLoaded,
-    menuRequested
+    menuRequested,
+    menuError
 };
 
 export default WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(MenuList));
