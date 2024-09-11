@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import WithRestoService from '../hoc';
-import { menuLoaded, menuRequested, menuError } from '../../actions';
+import { menuLoaded, menuRequested, menuError, addedToCart } from '../../actions';
 import { Link, useParams } from 'react-router-dom';
 import Spinner from '../spinner';
 import Error from '../error';
 import './item-page.scss';
 
-const ItemPage = ({RestoService, menuLoaded, menuRequested, menuError, menuItems, loading, error}) => {
+const ItemPage = ({RestoService, menuLoaded, menuRequested, menuError, menuItems, loading, error, addedToCart}) => {
     const { id } = useParams();
 
     useEffect(() => {
@@ -65,7 +65,7 @@ const ItemPage = ({RestoService, menuLoaded, menuRequested, menuError, menuItems
                 </div>
                 <div className="menu__price">Price: <span>{price}$</span></div>
                 <div className="menu__btns">
-                    <button className="menu__btn">Add to cart</button>
+                    <button onClick={() => addedToCart(id)} className="menu__btn">Add to cart</button>
                     <NavBtns itemId={id} menuItems = {menuItems}/>
                     <Link to={`/`}>
                         <button className="menu__btn menu__btn_back">Back</button>
@@ -114,7 +114,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     menuLoaded,
     menuRequested,
-    menuError
+    menuError,
+    addedToCart
 };
 
 export default WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(ItemPage));
