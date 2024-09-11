@@ -31,6 +31,10 @@
     &__btn {
         &_back {
             background-color: rgb(163, 31, 31);
+            transition: .6s;
+            &:hover {
+                background-color: rgb(224, 22, 22);
+            }
         }
     }
 }
