@@ -31,10 +31,31 @@ const deletedFromCart = (id) => {
     }
 };
 
+const orderSubmited = () => {
+    return {
+        type: 'ORDER_SUCCESS'
+    }
+};
+
+const orderError = () => {
+    return {
+        type: 'ORDER_ERROR'
+    }
+};
+
+const orderReset = () => {
+    return {
+        type: 'ORDER_RESET'
+    }
+};
+
 export {
     menuLoaded,
     menuRequested,
     menuError,
     addedToCart,
-    deletedFromCart
+    deletedFromCart,
+    orderSubmited,
+    orderError,
+    orderReset
 };

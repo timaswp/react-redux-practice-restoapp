@@ -1,9 +1,45 @@
 import React from 'react';
 import './cart-table.scss';
 import { connect } from 'react-redux';
-import { deletedFromCart } from '../../actions';
+import { deletedFromCart, orderError, orderReset, orderSubmited } from '../../actions';
+import { Link } from 'react-router-dom';
+import WithRestoService from '../hoc';
 
-const CartTable = ({items, deletedFromCart}) => {
+const CartTable = ({items, deletedFromCart, RestoService, orderStatus, orderSubmited, orderError, orderReset}) => {
+
+    const submitOrder = async () => {
+        try {
+            await RestoService.setOrder(CreateOrder(items));
+            orderSubmited();
+        } catch (error) {
+            console.error('Failed to submit order:', error);
+            orderError();
+        }
+    };
+
+
+
+    if (items.length === 0){
+        return (
+            <>
+                <div className="cart__title">Your cart is empty :(</div>
+                <Link className="cart__link" to={'/'}>
+                    <button className="cart__btn cart__btn_back">Back</button>
+                </Link>
+            </>         
+        )
+    }
+
+    if (orderStatus === 'success') {
+        return (
+            <>
+                <div className="cart__title">Order submitted successfully!</div>
+                <Link className="cart__link" to={'/'}>
+                    <button onClick={() => orderReset()} className="cart__btn">Make a new order</button>
+                </Link>
+            </>
+        )
+    }
 
     return (
         <>
@@ -12,6 +48,7 @@ const CartTable = ({items, deletedFromCart}) => {
                 {
                     items.map(item => {
                         const {title, price, url, id, quantity} = item;
+                        
                         return (
                             <div key={id} className="cart__item">
                                 <img src={url} className="cart__item-img" alt={title}></img>
@@ -22,20 +59,36 @@ const CartTable = ({items, deletedFromCart}) => {
                         )
                     })
                 }
+                <button onClick={() => submitOrder()} className="cart__btn">Submit order</button>
             </div>
-            {/* <button className="cart__btn">Submit order</button> нужно дорабоать */}
+
+            {orderStatus === 'error' && <div className="cart__error">Failed to submit order. Please try again.</div>}
         </>
     );
 };
 
-const mapStateToProps = ({items}) => {
+const CreateOrder = (items) => {
+    const newOrder = items.map(item => {
+        return {
+            id: item.id,
+            quantity: item.quantity
+        }
+    });
+    return newOrder;
+};
+
+const mapStateToProps = (state) => {
     return {
-        items
+        items: state.items,
+        orderStatus: state.orderStatus
     }
 };
 
 const mapDispatchToProps = {
-    deletedFromCart
+    deletedFromCart,
+    orderSubmited,
+    orderError,
+    orderReset
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CartTable);
+export default WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(CartTable));

@@ -3,7 +3,8 @@ const initialState = {
     loading: true,
     error: false,
     items: [],
-    totalPrice: 0
+    totalPrice: 0,
+    orderStatus: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -102,6 +103,26 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 items: updatedItems,
                 totalPrice: total
+            };
+        }
+        case 'ORDER_SUCCESS': {
+            return {
+                ...state,
+                orderStatus: 'success'
+            };
+        }
+        case 'ORDER_ERROR': {
+            return {
+                ...state,
+                orderStatus: 'error'
+            };
+        }
+        case 'ORDER_RESET': {
+            return {
+                ...state,
+                items: [],
+                totalPrice: 0,
+                orderStatus: null
             };
         }
         default:
